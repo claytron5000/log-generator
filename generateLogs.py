@@ -19,13 +19,13 @@ def generateRandomResponseCode():
     err = random.choices(["ERROR", "INFO", "WARNING"], [1, 55, 5])
 
     if err[0] == "ERROR":
-        code = random.choice([400, 403, 404, 500])
+        code = random.choice(["400", "403", "404", "500"])
     elif err[0] == "INFO":
-        code = random.choices([200, 201, 301], [50, 18, 9])
+        code = random.choices(["200", "201", "301"], [50, 18, 9])
     else:
-        code = random.choice([301, 302, 339])
+        code = random.choice(["301", "302", "339"])
 
-    return "{} {}".format(err[0], code[0])
+    return "{} {}".format(err[0], str(code[0]))
 
 
 def file_len(fname):
@@ -50,6 +50,15 @@ def gererateFilePath():
 def generateRow():
     return "[{}] {} {} {}".format(generateDate(start, end), random.randrange(10000), generateRandomResponseCode(), gererateFilePath())
 
-
 # test
-print(generateRow())
+# print(generateRow())
+
+
+def generateLogs(number):
+    with open("logs.txt", "x") as log:
+        for i in range(number):
+            line = generateRow()
+            log.write(line)
+
+
+generateLogs(10000)
