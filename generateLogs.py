@@ -61,19 +61,18 @@ class LogGenerator:
 
     def generateLogs(self, number: int):
         if os.path.exists("./logs.txt"):
-            with open("logs.txt", "w") as log:
+            with open("logs.txt", "w") as logfile:
                 for i in range(number):
                     line = self.generateRow()
-                    log.write(line)
+                    logfile.write(line)
         else:
-            with open("logs.txt", "x") as log:
+            with open("logs.txt", "x") as logfile:
                 for i in range(number):
                     line = self.generateRow()
-                    log.write(line)
+                    logfile.write(line)
 
 
-# generateLogs(10000)
 start = datetime.datetime.strptime("2021-05-12", "%Y-%m-%d")
 end = datetime.datetime.strptime("2021-05-18", "%Y-%m-%d")
 generator = LogGenerator(start, end)
-generator.generateLogs(1000000)
+generator.generateLogs(10_000_000)
