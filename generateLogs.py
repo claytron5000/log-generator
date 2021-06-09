@@ -15,19 +15,15 @@ class LogGenerator:
         random_second = random.randrange(int_delta)
         return startDateTime + datetime.timedelta(seconds=random_second)
 
-    # test
-
-    # print(generateDate(start, end))
-
     def generateRandomResponseCode(self):
-        err = random.choices(["ERROR", "INFO", "WARNING"], [1, 55, 5])
+        err = random.choices(["ERROR", "INFO", "WARNING"], [10, 55, 5])
 
         if err[0] == "ERROR":
-            code = random.choice(["400", "403", "404", "500"])
+            code = random.choices(["400", "403", "404", "422", "418", "451", "438", "500", "502"], [3, 4, 5, 4, 3, 4, 1, 4, 2])
         elif err[0] == "INFO":
             code = random.choices(["200", "201", "301"], [50, 18, 9])
         else:
-            code = random.choice(["301", "302", "339"])
+            code = random.choices(["301", "302", "308"], [1, 1, 1])
 
         return "{} {}".format(err[0], str(code[0]))
 
@@ -48,16 +44,26 @@ class LogGenerator:
 
         return ""
 
+    def generateErrorPath(self):
+        return random.choice(["sites/all/libraries/phpmailer/find.php", "modules/menu/the/answer.php"])
+
     def generateRow(self):
-        return "[{}] {} {} {}".format(
+        responseCode = self.generateRandomResponseCode()
+        # print(responseCode)
+        if responseCode == "ERROR 438":
+            return "[{}] {} {} {}".format(
             self.generateDate(self.start, self.end),
             random.randrange(10000),
-            self.generateRandomResponseCode(),
-            self.gererateFilePath()
-        )
-
-    # test
-    # print(generateRow())
+            responseCode,
+            self.generateErrorPath()
+            ) + "\n"
+        else:
+            return "[{}] {} {} {}".format(
+                self.generateDate(self.start, self.end),
+                random.randrange(10000),
+                responseCode,
+                self.gererateFilePath()
+            )
 
     def generateLogs(self, number: int):
         if os.path.exists("./logs.txt"):
@@ -75,4 +81,4 @@ class LogGenerator:
 start = datetime.datetime.strptime("2021-05-12", "%Y-%m-%d")
 end = datetime.datetime.strptime("2021-05-18", "%Y-%m-%d")
 generator = LogGenerator(start, end)
-generator.generateLogs(10_000_000)
+generator.generateLogs(10_000)
